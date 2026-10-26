@@ -1,0 +1,20 @@
+# Rust / Tauri build output
+/target/
+/src-tauri/target/
+
+# JavaScript tooling (the current web app has no external npm dependencies)
+/node_modules/
+/dist/
+
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Local test artifacts and crash recovery exports
+*.log
+*.tmp
+*.vex

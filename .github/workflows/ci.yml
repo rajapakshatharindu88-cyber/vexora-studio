@@ -1,0 +1,55 @@
+name: VEXORA source checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-check:
+    name: Validate source and feature tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check JavaScript syntax
+        run: npm run check
+      - name: Run core tests
+        run: npm test
+      - name: Validate Rust formatting if toolchain is available
+        run: |
+          if command -v cargo >/dev/null 2>&1 && command -v rustfmt >/dev/null 2>&1; then
+            rustfmt --edition 2021 --check src-tauri/src/main.rs src-tauri/build.rs
+          else
+            echo "Rust toolchain unavailable in runner image; Rust formatting check skipped."
+          fi
+      - name: Upload source archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: VEXORA-Source
+          path: |
+            web/
+            src-tauri/
+            docs/
+            tests/
+            samples/
+            .github/
+            README.md
+            START-HERE-SI.md
+            LICENSE
+            CHANGELOG.md
+            CONTRIBUTING.md
+            SECURITY.md
+            package.json
+            run-linux.sh
+            build-desktop-linux.sh
+            .gitignore
+          if-no-files-found: error

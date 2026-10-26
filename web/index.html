@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="VEXORA — an original, lightweight vector design studio with offline smart design tools.">
+  <title>VEXORA Studio</title>
+  <link rel="icon" type="image/jpeg" href="./assets/vexora-logo-original.jpg">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell" id="appShell">
+    <header class="titlebar">
+      <div class="traffic-lights" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="brand-mark"><img class="brand-logo" src="./assets/vexora-logo-original.jpg" alt="VEXORA logo"><div class="brand-name">VEXORA <span>STUDIO</span></div></div>
+      <div class="document-title"><span class="status-dot"></span><span id="documentName">Untitled Design</span><span id="dirtyMark" class="dirty-mark" hidden>•</span></div>
+      <div class="title-actions">
+        <button class="icon-button" id="themeButton" title="Toggle light/dark appearance" aria-label="Toggle appearance">◐</button>
+        <button class="icon-button" id="helpButton" title="Keyboard shortcuts" aria-label="Help">?</button>
+      </div>
+    </header>
+    <nav class="menu-bar" aria-label="Application menu">
+      <button data-menu="file">File</button><button data-menu="edit">Edit</button><button data-menu="object">Object</button><button data-menu="view">View</button><button data-menu="window">Window</button><button data-menu="help">Help</button>
+      <div class="menu-spacer"></div><span class="menu-status" id="saveStatus">Offline · Local document</span>
+    </nav>
+    <div class="toolbar-row">
+      <div class="document-tabs"><button class="tab active" id="activeTab">Untitled Design <span>×</span></button><button class="new-tab" id="newDocumentButton" title="New document">+</button></div>
+      <div class="quick-actions">
+        <button class="small-button" id="undoButton" title="Undo (Ctrl/Cmd+Z)">↶</button><button class="small-button" id="redoButton" title="Redo (Ctrl/Cmd+Shift+Z)">↷</button><i></i>
+        <button class="small-button" id="saveButton" title="Save VEXORA project">Save</button><button class="small-button primary" id="exportButton" title="Export artwork">Export</button>
+      </div>
+    </div>
+    <main class="workspace">
+      <aside class="tool-rail" aria-label="Tools">
+        <div class="tool-group">
+          <button class="tool active" data-tool="select" title="Selection (V)" aria-label="Selection"><span class="tool-icon">↖</span><small>V</small></button>
+          <button class="tool" data-tool="node" title="Direct select / nodes (A)" aria-label="Node editing"><span class="tool-icon">⌁</span><small>A</small></button>
+          <div class="tool-divider"></div>
+          <button class="tool" data-tool="pen" title="Pen / freeform path (P)" aria-label="Pen"><span class="tool-icon">⌁</span><small>P</small></button>
+          <button class="tool" data-tool="pencil" title="Freehand pencil (N)" aria-label="Pencil"><span class="tool-icon">／</span><small>N</small></button>
+          <button class="tool" data-tool="rect" title="Rectangle (R)" aria-label="Rectangle"><span class="tool-icon">▱</span><small>R</small></button>
+          <button class="tool" data-tool="ellipse" title="Ellipse (O)" aria-label="Ellipse"><span class="tool-icon">◯</span><small>O</small></button>
+          <button class="tool" data-tool="line" title="Line (L)" aria-label="Line"><span class="tool-icon">／</span><small>L</small></button>
+          <button class="tool" data-tool="text" title="Text (T)" aria-label="Text"><span class="tool-icon">T</span><small>T</small></button>
+          <button class="tool" data-tool="eyedropper" title="Eyedropper (I)" aria-label="Eyedropper"><span class="tool-icon">◉</span><small>I</small></button>
+        </div>
+        <div class="tool-bottom">
+          <button class="color-chip" id="fillChip" title="Current fill color"><span></span></button>
+          <button class="stroke-chip" id="strokeChip" title="Current stroke color"><span></span></button>
+          <button class="rail-icon" id="gridButton" title="Toggle grid">▦</button>
+          <button class="rail-icon" id="snapButton" title="Toggle snapping">⌖</button>
+        </div>
+      </aside>
+      <section class="canvas-area" id="canvasArea" aria-label="Design canvas">
+        <div class="canvas-toolbar">
+          <div class="canvas-tools-left"><span class="canvas-label">CANVAS</span><span class="canvas-divider"></span><span id="selectionCount">No selection</span></div>
+          <div class="canvas-tools-right"><button id="zoomOut" aria-label="Zoom out">−</button><span id="zoomValue">100%</span><button id="zoomIn" aria-label="Zoom in">+</button><span class="canvas-divider"></span><button id="fitButton">Fit</button></div>
+        </div>
+        <div class="canvas-viewport" id="canvasViewport">
+          <div class="canvas-board-wrap" id="canvasBoardWrap">
+            <svg id="designSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Vector artwork canvas">
+              <defs><pattern id="gridPattern" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#8c8e98" stroke-opacity=".16" stroke-width=".7"/></pattern></defs>
+              <rect id="boardBackground" x="0" y="0" width="1200" height="800" fill="#ffffff"/>
+              <rect id="gridLayer" class="grid-layer" x="0" y="0" width="1200" height="800" fill="url(#gridPattern)" pointer-events="none"/>
+              <g id="artworkLayer"></g><g id="selectionLayer" pointer-events="none"></g><g id="interactionLayer" pointer-events="none"></g>
+            </svg>
+          </div>
+          <div class="canvas-empty-hint" id="emptyHint"><div class="hint-icon">✳</div><strong>Your canvas is ready</strong><span>Choose a tool on the left and start creating.</span><button id="starterButton" class="small-button">Create a quick layout</button></div>
+        </div>
+        <footer class="statusbar"><span id="toolHint">Selection tool · Click an object to select it</span><span id="cursorPosition">X: — &nbsp; Y: —</span><span id="documentSize">1200 × 800 px</span></footer>
+      </section>
+      <aside class="inspector" aria-label="Inspector">
+        <div class="inspector-tabs"><button class="inspector-tab active" data-inspector="design">Design</button><button class="inspector-tab" data-inspector="layers">Layers</button><button class="inspector-tab" data-inspector="assets">Assets</button></div>
+        <div class="inspector-content" id="inspectorContent"></div>
+      </aside>
+    </main>
+    <div class="bottom-dock">
+      <button data-panel="assistant" class="dock-item active"><span>✳</span> Smart Studio</button>
+      <button data-panel="preflight" class="dock-item"><span>◉</span> Print Check</button>
+      <button data-panel="history" class="dock-item"><span>↶</span> History</button>
+      <div class="dock-spacer"></div><span class="memory-note">Low-memory mode · Offline tools</span>
+    </div>
+    <section class="studio-panel" id="studioPanel">
+      <div class="studio-panel-head"><div><span class="eyebrow">VEXORA INTELLIGENCE</span><h2 id="studioTitle">Smart Studio</h2></div><div class="studio-head-actions"><button class="icon-button" id="studioCollapse" title="Collapse panel">⌄</button><button class="icon-button" id="studioClose" title="Close panel">×</button></div></div>
+      <div class="studio-panel-body" id="studioBody"></div>
+    </section>
+  </div>
+  <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+  <dialog id="genericDialog" class="app-dialog"><div class="dialog-head"><div><span class="eyebrow" id="dialogEyebrow">VEXORA</span><h2 id="dialogTitle">Dialog</h2></div><button class="icon-button" id="dialogClose" aria-label="Close">×</button></div><div class="dialog-body" id="dialogBody"></div></dialog>
+  <input type="file" id="openFileInput" accept=".vex,.json,.svg,image/svg+xml,application/json" hidden>
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
