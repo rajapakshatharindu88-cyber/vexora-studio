@@ -31,7 +31,7 @@
   "bundle": {
     "active": true,
     "targets": ["appimage", "deb", "rpm"],
-    "category": "Graphics",
+    "category": "Graphics and Design",
     "shortDescription": "Offline-first vector design studio",
     "longDescription": "An original lightweight vector design editor with offline smart design tools.",
     "license": "MIT",
