@@ -1,0 +1,45 @@
+
+name: VEXORA Linux Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Get source code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential curl wget file \
+            libwebkit2gtk-4.1-dev libxdo-dev libssl-dev \
+            librsvg2-dev patchelf
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Tauri CLI
+        run: cargo install tauri-cli --locked
+
+      - name: Build Linux app
+        run: cargo tauri build
+        working-directory: src-tauri
+
+      - name: Save installer files
+        uses: actions/upload-artifact@v4
+        with:
+          name: VEXORA-Linux-Installers
+          path: |
+            src-tauri/target/release/bundle/deb/*.deb
+            src-tauri/target/release/bundle/appimage/*.AppImage
+          if-no-files-found: error
